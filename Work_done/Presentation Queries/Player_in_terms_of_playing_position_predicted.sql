@@ -1,0 +1,34 @@
+select Player.player_name as Name, avg(overall_rating) as Lifetime_Rating,
+(avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 
+2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11 as Defender_Rating,
+(avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 
+2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 
+3*avg(Player_Attributes.dribbling) )/18 as Striker_Rating,
+(2*avg(Player_Attributes.gk_diving) + avg(Player_Attributes.gk_handling) + avg(Player_Attributes.gk_kicking) + avg(Player_Attributes.gk_positioning) + 3*avg(Player_Attributes.gk_reflexes) )/8 as Goalkeeper_Rating,
+(case 
+	when ((avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11) - ((avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 3*avg(Player_Attributes.dribbling) )/18) <= 20 and ((avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11) - ((avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 3*avg(Player_Attributes.dribbling) )/18) >= 0
+	then'Defender/Midfielder' 
+	else 
+		case 
+			when ((avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 3*avg(Player_Attributes.dribbling) )/18) - ((avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11) <= 25 and ((avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 3*avg(Player_Attributes.dribbling) )/18) - ((avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11) >= 0 
+			then 'Attacker/Midfielder'
+			else
+				case
+					when ((avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11) > ((avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 3*avg(Player_Attributes.dribbling) )/18) and ((avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11) > ((2*avg(Player_Attributes.gk_diving) + avg(Player_Attributes.gk_handling) + avg(Player_Attributes.gk_kicking) + avg(Player_Attributes.gk_positioning) + 3*avg(Player_Attributes.gk_reflexes) )/8)
+					then 'Defender'
+					else
+						case
+							when ((avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 3*avg(Player_Attributes.dribbling) )/18) > ((avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11) and ((avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 3*avg(Player_Attributes.dribbling) )/18) > ((2*avg(Player_Attributes.gk_diving) + avg(Player_Attributes.gk_handling) + avg(Player_Attributes.gk_kicking) + avg(Player_Attributes.gk_positioning) + 3*avg(Player_Attributes.gk_reflexes) )/8)
+							then 'Striker'
+							else
+								case
+									when ((2*avg(Player_Attributes.gk_diving) + avg(Player_Attributes.gk_handling) + avg(Player_Attributes.gk_kicking) + avg(Player_Attributes.gk_positioning) + 3*avg(Player_Attributes.gk_reflexes) )/8) > ((avg(Player_Attributes.crossing) + avg(Player_Attributes.short_passing) + 2*avg(Player_Attributes.vision) + 3*avg(Player_Attributes.ball_control) + 2*avg(Player_Attributes.penalties) + 2*avg(Player_Attributes.potential) + avg(Player_Attributes.volleys) + 3*avg(Player_Attributes.finishing) + 3*avg(Player_Attributes.dribbling) )/18) and ((2*avg(Player_Attributes.gk_diving) + avg(Player_Attributes.gk_handling) + avg(Player_Attributes.gk_kicking) + avg(Player_Attributes.gk_positioning) + 3*avg(Player_Attributes.gk_reflexes) )/8) > ((avg(Player_Attributes.heading_accuracy) + 3*avg(Player_Attributes.interceptions) + 2*avg(Player_Attributes.sliding_tackle) + 2*avg(Player_Attributes.standing_tackle) + avg(Player_Attributes.aggression) + 2*avg(Player_Attributes.strength) )/11)
+									then 'Goalkeeper'
+								end
+						end
+				end
+		end
+end) as Player_Type_Possibility
+from Player_Attributes full outer join Player on Player_Attributes.player_api_id = Player.player_api_id
+group by Player.player_name, Player.birthday
+order by Lifetime_Rating DESC
